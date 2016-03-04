@@ -39,3 +39,4 @@ def pluralmediancalculator(m,n):
     return median(l)
     
 print pluralmediancalculator(10000,1000)
+print singlemeancalculator(1000000000)
