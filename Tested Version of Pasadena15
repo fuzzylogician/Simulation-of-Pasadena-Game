@@ -1,0 +1,65 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar  4 17:20:26 2016
+
+@author: u5446998
+"""
+import random
+import math
+
+def tosser():
+    n = 1
+    t = random.random()
+    while t <= 0.5:
+        n = n+1
+        t = random.random()
+#    print "n = %s." % n
+    return n
+
+def pasadena():
+    n = tosser()
+    return math.pow(-1,n-1)*(math.pow(2,n)/n)
+    
+def pasadena15(): #This is the so called 1-5 pasadena game/ -0.11 pasadena
+    m = tosser()
+    p = recoverpayoff(m)
+#    print "p = %s." % p
+    return p
+    
+def repeater(n):
+    l = list()
+    for i in range(1,n+1):
+        q = pasadena15()
+        l.append(q)
+#    print "l = %s." % l
+    return l
+    
+def singlemeancalculator(n):
+    l = repeater(n)
+#    print "len = %s." % len(l)
+    return sum(l)/float(len(l))
+
+def median(l):
+    half = len(l) // 2
+    l.sort()
+    if not len(l) % 2:
+        return (l[half - 1] + l[half]) / 2.0
+    return l[half]
+
+def pluralmediancalculator(m,n):
+    l = list()
+    for i in range(1,m+1):
+        l.append(singlemeancalculator(n))
+    return median(l)
+
+def recoverpayoff(m):
+    if m%6 == 1:
+        n = (2*(m-1))/6+1
+        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        return p
+    else:
+        n = 2*(m-1)
+        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        return p
+
+print singlemeancalculator(10000000)
