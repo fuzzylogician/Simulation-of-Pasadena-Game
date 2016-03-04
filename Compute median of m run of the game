@@ -1,7 +1,7 @@
 import random
 import math
 
-def tosser():
+def tosser(): #It's used to flip coins in Pasadena/St. Petersburg way
     n = 1
     t = random.random()
     while t <= 0.5:
@@ -9,20 +9,23 @@ def tosser():
         t = random.random()
     return n
 
-def pasadena():
+def pasadena(): #It's used to locate the value of the first pasadena game given information about coin flipping 
     n = tosser()
-#    print n    
     return math.pow(-1,n-1)*(math.pow(2,n)/n)
     
-def repeater(n):
+def pasadena15():
+    m = tosser()
+    return recoverpayoff(m)
+    
+def repeater(n): #It's used to give a list with the payoff records of n games in a row
     l = list()
-    for i in range(1,n):
-        q = pasadena()
+    for i in range(1,n+1):
+        q = pasadena()    #Simply change here between pasadena and pasadena15 to run different games
         l.append(q)
     return l
     
-def singlemeancalculator(n):
-    l = repeater(n+1)
+def singlemeancalculator(n): #It's used to compute the mean
+    l = repeater(n)
     return sum(l)/float(len(l))
 
 def median(l):
@@ -34,9 +37,17 @@ def median(l):
 
 def pluralmediancalculator(m,n):
     l = list()
-    for i in range(1,m):
+    for i in range(1,m+1):
         l.append(singlemeancalculator(n))
     return median(l)
-    
-print pluralmediancalculator(10000,1000)
-print singlemeancalculator(1000000000)
+
+def recoverpayoff(m): 
+    if m%6 == 1:
+        n = (2*(m-1))/6+1
+        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        return p
+    else:
+        n = 2*(m-1)
+        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        return p
+
