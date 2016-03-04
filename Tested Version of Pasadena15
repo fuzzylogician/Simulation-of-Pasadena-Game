@@ -56,10 +56,22 @@ def recoverpayoff(m):
     if m%6 == 1:
         n = (2*(m-1))/6+1
         p = math.pow(-1,n-1)*(math.pow(2,n)/n)
-        return p
-    else:
-        n = 2*(m-1)
+        #print "m = %s" % m        
+        print "n = %s" % n
+        #print "p = %s" % p
+        
+    elif m%6 == 0:
+        n = m/6 * 10
         p = math.pow(-1,n-1)*(math.pow(2,n)/n)
-        return p
+                #print "m = %s" % m        
+        print "n = %s" % n
+        #print "p = %s" % p
+
+    else:
+        n = 2*(m-(1+((m-(m%6))/6)))
+        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        #print "m = %s" % m        
+        print "n = %s" % n
+        #print "p = %s" % p
 
 print singlemeancalculator(10000000)
