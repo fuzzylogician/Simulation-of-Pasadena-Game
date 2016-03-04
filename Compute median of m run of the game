@@ -23,7 +23,7 @@ def repeater(n):
     
 def singlemeancalculator(n):
     l = repeater(n+1)
-    return sum(l)/len(l)
+    return sum(l)/float(len(l))
 
 def median(l):
     half = len(l) // 2
