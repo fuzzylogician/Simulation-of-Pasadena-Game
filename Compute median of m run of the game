@@ -1,0 +1,41 @@
+import random
+import math
+
+def tosser():
+    n = 1
+    t = random.random()
+    while t <= 0.5:
+        n = n+1
+        t = random.random()
+    return n
+
+def pasadena():
+    n = tosser()
+#    print n    
+    return math.pow(-1,n-1)*(math.pow(2,n)/n)
+    
+def repeater(n):
+    l = list()
+    for i in range(1,n):
+        q = pasadena()
+        l.append(q)
+    return l
+    
+def singlemeancalculator(n):
+    l = repeater(n+1)
+    return sum(l)/len(l)
+
+def median(l):
+    half = len(l) // 2
+    l.sort()
+    if not len(l) % 2:
+        return (l[half - 1] + l[half]) / 2.0
+    return l[half]
+
+def pluralmediancalculator(m,n):
+    l = list()
+    for i in range(1,m):
+        l.append(singlemeancalculator(n))
+    return median(l)
+    
+print pluralmediancalculator(10000,1000)
