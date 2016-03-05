@@ -52,26 +52,48 @@ def pluralmediancalculator(m,n):
         l.append(singlemeancalculator(n))
     return median(l)
 
-def recoverpayoff(m):
+
+def recovern(m):    #input m, output n
     if m%6 == 1:
         n = (2*(m-1))/6+1
-        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
-        #print "m = %s" % m        
-        print "n = %s" % n
-        #print "p = %s" % p
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
         
     elif m%6 == 0:
         n = m/6 * 10
-        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
-                #print "m = %s" % m        
-        print "n = %s" % n
-        #print "p = %s" % p
-
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+        
     else:
         n = 2*(m-(1+((m-(m%6))/6)))
-        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
-        #print "m = %s" % m        
-        print "n = %s" % n
-        #print "p = %s" % p
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+    return float(n)
 
-print singlemeancalculator(10000000)
+def recoverpayoff(m): #input m, output payoff
+    n = recovern(m)    
+    p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+    return p
+
+def recoverproduct(m): #input m, output product
+    n = recovern(m)
+    if (n % 2 == 0):
+        product = -(1/n)
+    else:
+        product = 1/n
+    return product
+
+def recoversp(m):   #input m, output sp
+    product = recoverproduct(m)
+    p = recoverpayoff(m)
+    sp = product / p
+    return sp
+
+def getip(m): #this one is to get inline probability for given m by converting sp into ip using the formula given in gwiazda
+    sp = recoversp(m)    
+    ip = sp
+    if m == 1:
+        ip = sp
+    else: 
+        for i in xrange(1,m):
+            ip = ip * (1/(1-recoversp(i)))
+            print ip
+    return ip
+\
