@@ -20,7 +20,7 @@ def pasadena():
     n = tosser()
     return math.pow(-1,n-1)*(math.pow(2,n)/n)
     
-def pasadena15(): #This is the so called 1-5 pasadena game/ -0.11 pasadena
+def pasadena15(): #This is not yet a proper pasadena -.11 game yet. I got the p right for this turn but, the chance is wrong. 
     m = tosser()
     p = recoverpayoff(m)
 #    print "p = %s." % p
