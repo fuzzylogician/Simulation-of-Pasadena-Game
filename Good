@@ -1,0 +1,110 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Mar  4 16:51:34 2016
+
+@author: u5446998
+"""
+
+#After finishing the body part, remember to             //////Done
+#import big float to solve the accuracy problem
+#import xlwt to export data
+#ip function is better now. But remember to have a look on ip when m = 1+hugenumber*6 after solving the accuracy and optimization problem.
+
+from operator import mul
+import random
+import math
+import gmpy2
+
+def recovern(m):    #input m, output n
+    if m%6 == 1:
+        n = (2*(m-1))/6+1
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+    elif m%6 == 0:
+        n = m/6 * 10
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+    else:
+        n = 2*(m-(1+((m-(m%6))/6)))
+#        p = math.pow(-1,n-1)*(math.pow(2,n)/n)
+    return gmpy2.mpz(n)
+
+
+#def recoverproduct(m): #input m, output product  This one is actually not useful at all.
+#    n = recovern(m)
+#    if (n % 2 == 0):
+#        product = -(1/n)
+#    else:
+#        product = 1/n
+#    return product
+
+
+###### Following section is used to toss properly for pasadena -0.11
+def recoversp(m):   #input m, output sp
+    n = recovern(m)
+    sp = 1/gmpy2.exp2(n)  #NEED GMPY2 ///DONE
+    return sp
+
+
+def bettergetip(m): #This one is much better than its previous version.
+    l=list()    
+    ip = gmpy2.mpfr(1.0/2)
+    for i in xrange(1,m):
+        l.append(1/(1-ip))
+        ip = recoversp(i+1)*reduce(mul, l, 1)
+    return ip
+
+
+def tosser():
+    n = 1
+    t = random.random()
+    while t >= bettergetip(n):
+        n = n+1
+        t = random.random()
+    return n
+
+######
+
+
+###### Following section is used to run a single pasadena1-5 game
+def recoverpayoff(m): #input m, output payoff
+    n = recovern(m)    
+    if gmpy2.is_even(n):    
+        p = -(gmpy2.div(gmpy2.exp2(n),n))
+    else:
+        p = (gmpy2.div(gmpy2.exp2(n),n))
+    return p
+
+
+def pasadena15(): #This is the so called 1-5 pasadena game/ -0.11 pasadena
+    m = tosser()
+#    print m
+    return recoverpayoff(m)
+######
+
+
+def repeater(n):
+    l = list()
+    for i in range(1,n+1):
+        q = pasadena15()
+        l.append(q)
+    return l
+
+   
+def singlemeancalculator(n):
+    l = repeater(n)
+    return gmpy2.fsum(l)/len(l)
+
+print singlemeancalculator(10000000)
+
+def median(l):
+    half = len(l) // 2
+    l.sort()
+    if not len(l) % 2:
+        return (l[half - 1] + l[half]) / 2.0
+    return l[half]
+
+
+def pluralmediancalculator(m,n):
+    l = list()
+    for i in range(1,m+1):
+        l.append(singlemeancalculator(n))
+    return median(l)
